@@ -6,27 +6,18 @@ from .models import OrdenTrabajo, Cliente                  # Importa la clase de
 from .serializers import OrdenTrabajoSerializer, ClienteSerializer     # Importa la clase traductora declarada en serializers.py
 from rest_framework import generics
 
-
-
-#remplazo de ordenes_list_create_view
-class lista_de_ordenes(generics.ListCreateAPIView):
-    queryset = OrdenTrabajo.objects.all()
-    serializer_class = OrdenTrabajoSerializer
-
-
-#remplazo de orden_detail_view
-class detalle_de_orden(generics.RetrieveUpdateDestroyAPIView):
-    queryset = OrdenTrabajo.objects.all()
-    serializer_class = OrdenTrabajoSerializer
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 
-#para cliente
-class lista_de_clientes(generics.ListCreateAPIView):
+class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class detalle_de_cliente(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Cliente.objects.all()
-    serializer_class = ClienteSerializer
+class OrdenTrabajoViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = OrdenTrabajo.objects.all()
+    serializer_class = OrdenTrabajoSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

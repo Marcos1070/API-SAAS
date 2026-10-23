@@ -1,18 +1,19 @@
-from django.urls import path
-from .views import lista_de_ordenes, detalle_de_orden, lista_de_clientes, detalle_de_cliente
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ClienteViewSet, OrdenTrabajoViewSet
+
+
+# se instancia el DefaultRouter
+router = DefaultRouter()
+
+#registramos nuestros ViewSets
+router.register(r'clientes', ClienteViewSet, basename = 'cliente')
+router.register(r'ordenes', OrdenTrabajoViewSet, basename = 'ordentrabajo')
+
+#incluimos las rutas generadas por el router en el urlpatterns
 
 urlpatterns = [
 
-    #ruta para listar y crear ordenes
-    path('ordenes/', lista_de_ordenes.as_view(), name='lista_de_ordenes'),
-
-    #ruta para obtener, editar o eliminar una orden por su id
-    path('ordenes/<int:pk>/', detalle_de_orden.as_view(), name='detalle de orden'),
-
-
-    path('clientes/', lista_de_clientes.as_view(), name='lista_de_clientes'),
-
-    path('clientes/<int:pk>/', detalle_de_cliente.as_view(), name='detalle_de_cliente'),
-
+    path('', include(router.urls))
 
 ]
